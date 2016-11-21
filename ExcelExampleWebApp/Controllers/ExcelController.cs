@@ -16,14 +16,6 @@ namespace ExcelExampleWebApp.Controllers
             return View();
         }
 
-    
-        [HttpPost]
-        public JsonResult GetExcelProviders()
-        {
-            var providers = new List<string>(new []{"Test", "test2"});
-            return Json(providers);
-        }
-
         [HttpPost]
         public JsonResult SearchUseNPOI(string searchName)
         {
