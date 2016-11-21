@@ -9,6 +9,7 @@
             $("#pLoading").hide();
 
             $("#btnNPOI").click(function () { loadNPOI(); });
+            $("#btnEPPlus").click(function () { loadEPPlus(); });
 
             function loadNPOI() {
                 $('#taResult').text("");
@@ -18,9 +19,19 @@
                 .always(function(){ $("#pLoading").hide();});
             }
 
+            function loadEPPlus() {
+                $('#taResult').text("");
+                $("#pLoading").show();
+                $.when($.post("@Url.Action("SearchUseEPPlus")", { searchName: $("#inputSearch").val() }))
+                .done(doneFunc)
+                .always(function(){ $("#pLoading").hide();});
+            }
+
             function doneFunc(data) {
                 $('#taResult').text(data);
             }
+
+            //SearchUseEPPlus
         });
 
         
@@ -33,7 +44,7 @@
 
 <input id="inputSearch" type="text" placeholder="search" />
 <button id="btnNPOI">Get Data use NPOI</button>
-
+<button id="btnEPPlus">Get Data use EPPlus</button>
 <textarea id="taResult">
 
 </textarea>

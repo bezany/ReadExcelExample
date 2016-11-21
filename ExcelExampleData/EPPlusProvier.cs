@@ -18,29 +18,36 @@ namespace ExcelExampleData
 
         public override List<string> SearchRow(string searchName)
         {
-            var file = new FileInfo(_fullFileName);
-            using (var ep = new ExcelPackage(file, true))
+            if (string.IsNullOrEmpty(searchName))
             {
-                var dt = ep.ToDataSet(firstRowContainsHeader: true);
-                var firstWs = dt.Tables[0];
-                var res = new List<string>();
-                foreach (var row in firstWs.Rows)
-                {
-                    //res.Add(row)
-                }
-                var sheetStartRow = 1;
-                var ws = ep.Workbook.Worksheets[0];
-                for (int i = sheetStartRow; i < ws.Dimension.End.Row; i++)
+                return null;
+            }
+            using (var fileStream = new FileStream(_fullFileName, FileMode.Open, FileAccess.Read))
+            using (var ep = new ExcelPackage(fileStream))
+            {
+                var ws = ep.Workbook.Worksheets["test"];
+                for (int i = ws.Dimension.Start.Row; i <= ws.Dimension.End.Row; i++)
                 {
                     var curRow = ws.Row(i);
-                    //curRow.
-                }
-                var firstColumnData = ws.Cells[sheetStartRow, 1, ws.Dimension.End.Row, 1];
-                var test = firstColumnData.FirstOrDefault(el => ((el.Value as string) ?? "").Contains(searchName));
-                //test.Address
-            }
+                    var cell = ws.Cells[curRow.Row, 1];
+                    var firstColval = cell.GetValue<string>();
+                    if ((firstColval ?? "")
+                        .ToUpper()
+                        .Contains(searchName.ToUpper()))
+                    {
+                        var res = new List<string>();
 
-            throw new NotImplementedException();
+                        for (int col = ws.Dimension.Start.Column; col <= ws.Dimension.End.Column; col++)
+                        {
+                            res.Add(ws.Cells[curRow.Row, col].GetValue<string>());
+                        }
+
+                        return res;
+                    }
+                }
+                return null;
+             }
+            
         }
     }
 }

@@ -30,5 +30,12 @@ namespace ExcelExampleWebApp.Controllers
             var data = new NPOIProvider(Server.MapPath("~/App_Data/test.xlsx")).SearchRow(searchName);
             return Json(data);
         }
+
+        [HttpPost]
+        public JsonResult SearchUseEPPlus(string searchName)
+        {
+            var data = new EPPlusProvier(Server.MapPath("~/App_Data/test.xlsx")).SearchRow(searchName);
+            return Json(data);
+        }
     }
 }
