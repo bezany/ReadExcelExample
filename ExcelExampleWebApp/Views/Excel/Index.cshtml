@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#pLoading").hide();
+
+            $("#btnNPOI").click(function () { loadNPOI(); });
+
+            function loadNPOI() {
+                $('#taResult').text("");
+                $("#pLoading").show();
+                $.when($.post("@Url.Action("SearchUseNPOI")", { searchName: $("#inputSearch").val() }))
+                .done(doneFunc)
+                .always(function(){ $("#pLoading").hide();});
+            }
+
+            function doneFunc(data) {
+                $('#taResult').text(data);
+            }
+        });
+
+        
+    </script>
+}
+
+<h2>Index</h2>
+
+<p id="pLoading">Loading...</p>
+
+<input id="inputSearch" type="text" placeholder="search" />
+<button id="btnNPOI">Get Data use NPOI</button>
+
+<textarea id="taResult">
+
+</textarea>
